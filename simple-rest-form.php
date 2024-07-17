@@ -8,8 +8,8 @@
  * Requires PHP: 7.0
  * Author: Rajan Lama
  * Author URI: Https://rajanlama.com.np
- * License: GPL 3.0
- * License URI: https://www.gnu.org/licenses/gpl-3.0.txt
+ * License: GPLv3 or later
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  * Update URI: https://github.com/rajan-lama/simple-rest-form
  * Text Domain: simple-rest-form
  * Domain Path: /languages
