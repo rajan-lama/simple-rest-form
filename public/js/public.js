@@ -1,32 +1,59 @@
-(function( $ ) {
-	'use strict';
+jQuery(document).ready(function ($) {
+  $("#business-form").on("submit", function (event) {
+    event.preventDefault(); // Prevent the default form submission
+    // Get form data
+    const data = {
+      name: $("#business-name").val(),
+      address: $("#business-address").val(),
+      website: $("#business-url").val(),
+    };
 
-	/**
-	 * All of the code for your public-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
+    // Send POST request using jQuery AJAX
+    $.ajax({
+      url: srfApiSettings.root + "business/v1/cards/",
+      type: "POST",
+      contentType: "application/json",
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("X-WP-Nonce", srfApiSettings.nonce);
+      },
+      dataType: "json",
+      data: JSON.stringify(data),
+      success: function (response) {
+        console.log("Success:", response);
+        // Handle success - you can update the UI or alert the user
+      },
+      error: function (xhr, status, error) {
+        console.error("Error:", error);
+        // Handle error - you can update the UI or alert the user
+      },
+    });
+  });
 
-})( jQuery );
+  $("#srf-search").on("click", function (event) {
+    event.preventDefault(); // Prevent the default form submission
+    // Get form data
+    const search = $("#srf_search_key").val();
+    const url = srfApiSettings.root + "business/v1/cards/?search=" + search;
+    $.getJSON(url, function (data) {
+      $(".widefat").html(
+        "<thead><tr><th>Id </th><th>Name </th><th>Address </th><th>Website </th><th>Register Date </th></tr></thead><tbody>"
+      );
+      data.forEach((item) => {
+        let row =
+          "<tr><td>" +
+          item.id +
+          "</td><td>" +
+          item.business_name +
+          "</td><td>" +
+          item.business_address +
+          "</td><td>" +
+          item.website_url +
+          "</td><td>" +
+          item.time +
+          "</td><tr>";
+        $(".widefat").append(row);
+      });
+      $(".widefat").append("</tbody>");
+    });
+  });
+});

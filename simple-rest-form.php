@@ -1,19 +1,23 @@
 <?php
-/*
-* Plugin Name: Simple Rest Form
-* Plugin URI: https://github.com/rajan-lama/simple-rest-form
-* Description: Make Magic
-* Version: 1.0.0
-* Requires at least: 6.5
-* Requires PHP: 5.6
-* Author: Rajan Lama
-* Author URI: Https://rajanlama.com.np
-* License: GPL 3.0
-* License URI: https://www.gnu.org/licenses/gpl-3.0.txt
-* Update URI: https://github.com/rajan-lama/simple-rest-form
-* Text Domain: simple-rest-form
-* Domain Path: /languages
-*/
+/**
+ * Plugin Name: Simple Rest Form
+ * Plugin URI: https://github.com/rajan-lama/simple-rest-form
+ * Description: Make Magic
+ * Version: 1.0.0
+ * Requires at least: 6.5
+ * Requires PHP: 7.0
+ * Author: Rajan Lama
+ * Author URI: Https://rajanlama.com.np
+ * License: GPL 3.0
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.txt
+ * Update URI: https://github.com/rajan-lama/simple-rest-form
+ * Text Domain: simple-rest-form
+ * Domain Path: /languages
+ *
+ * @package    Simple_Rest_Form
+ */
+
+namespace SimpleRestForm;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -28,27 +32,6 @@ if ( ! defined( 'WPINC' ) ) {
 define( 'SIMPLE_REST_FORM_VERSION', '1.0.0' );
 define( 'SIMPLE_REST_FORM_BASE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'SIMPLE_REST_FORM_BASE_URL', plugin_dir_url( __FILE__ ) );
-
-/**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-simple-rest-form-activator.php
- */
-function activate_simple_rest_form() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-simple-rest-form-activator.php';
-	Simple_Rest_Form_Activator::activate();
-}
-
-/**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-simple-rest-form-deactivator.php
- */
-function deactivate_simple_rest_form() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-simple-rest-form-deactivator.php';
-	Simple_Rest_Form_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_simple_rest_form' );
-register_deactivation_hook( __FILE__, 'deactivate_simple_rest_form' );
 
 /**
  * The core plugin class that is used to define internationalization,

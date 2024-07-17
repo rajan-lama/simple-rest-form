@@ -14,8 +14,24 @@
 namespace SimpleRestForm;
 
 ?>
-
+<style>
+#business-search-form {
+  display: flex;
+}
+button {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+</style>
 <h1>Business Info</h1>
+
+<form id="business-search-form" method="post" action="">  
+	<p>
+	<input class="widefat" id="srf_search_key" name="search" type="text" placeholder="Search..."/>
+	</p>
+	<button type="button" id="srf-search">Search</button>
+</form>
+
 <table class="widefat">
 	<thead>
 	<tr>
@@ -41,16 +57,10 @@ namespace SimpleRestForm;
 		/**
 		 * Fetching the data from database without restapi.
 		 */
-
-		/**
-		 * The line `db = new DB()` is attempting to create a new instance of the `DB` class. This suggests
-		 * that there is a class named `DB` being used in the code. The `DB` class likely contains methods
-		 * for interacting with a database, such as fetching data from a table.
-		 */
 		$db    = new DB();
-		$items = $db->table_results();
+		$items = $db->table_results( $attributes['search'] );
 
-		// implementin loop to fetch data.
+		// implementing loop to fetch data.
 	foreach ( $items as $item ) {
 		?>
 	<tr>

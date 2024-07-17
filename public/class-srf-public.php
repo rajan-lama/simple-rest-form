@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The public-facing functionality of the plugin.
  *
@@ -20,8 +19,12 @@
  * @subpackage Simple_Rest_Form/public
  * @author     Rajan Lama <rajan.lama786@gmail.com>
  */
-namespace SimpleRestForm;																																																															                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-class SRF_Public {
+namespace SimpleRestForm;
+
+/**
+ * This is a final class named SRF_Public for the public part for this plugins.
+ */
+final class SRF_Public {
 
 	/**
 	 * The ID of this plugin.
@@ -45,17 +48,20 @@ class SRF_Public {
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of the plugin.
-	 * @param      string    $version    The version of this plugin.
+	 * @param      string $plugin_name       The name of the plugin.
+	 * @param      string $version    The version of this plugin.
 	 */
 	public function __construct( $plugin_name, $version ) {
 
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->version     = $version;
 
-		add_action('admin_enqueue_scripts', [$this,'enqueue_styles'] );
-		add_action('admin_enqueue_scripts', [$this,'enqueue_scripts'] );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		// Register shortcode.
+		add_shortcode( 'business_form', array( $this, 'business_form_shortcode_callback' ) );
+		add_shortcode( 'business_info_list', array( $this, 'business_detail_shortcode_callback' ) );
 	}
 
 	/**
@@ -77,8 +83,7 @@ class SRF_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/class-srf-public.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/public.css', array(), $this->version, 'all' );
 	}
 
 	/**
@@ -100,8 +105,53 @@ class SRF_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/class-srf-public.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/public.js', array( 'jquery' ), $this->version, false );
+		wp_localize_script(
+			$this->plugin_name,
+			'srfApiSettings',
+			array(
+				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'root'    => esc_url_raw( rest_url() ),
+				'nonce'   => wp_create_nonce( 'wp_rest' ),
+			)
+		);
 	}
 
+	/**
+	 * Callback function for business detail entry form
+	 *
+	 * @param string $atts attributes of shortcode added during putting shortcode in post and page.
+	 * @return string
+	 */
+	public function business_form_shortcode_callback( $atts ) {
+		$attributes = shortcode_atts(
+			array(
+				'title' => false,
+			),
+			$atts
+		);
+
+		ob_start();
+		include SIMPLE_REST_FORM_BASE_PATH . 'public/partials/display-form.php';
+		return ob_get_clean();
+	}
+
+	/**
+	 * This is the call back function for listing business details.
+	 *
+	 * @param  mixed $atts attributes of shortcode added during putting shortcode in post and page.
+	 * @return string
+	 */
+	public function business_detail_shortcode_callback( $atts ) {
+		$attributes = shortcode_atts(
+			array(
+				'search' => '',
+			),
+			$atts
+		);
+
+		ob_start();
+		include SIMPLE_REST_FORM_BASE_PATH . 'public/partials/display-list.php';
+		return ob_get_clean();
+	}
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The file that defines the core plugin class
  *
@@ -27,7 +26,13 @@
  * @subpackage Simple_Rest_Form/includes
  * @author     Rajan Lama <rajan.lama786@gmail.com>
  */
-class SRF {
+
+namespace SimpleRestForm;
+
+/**
+ * This is the main class for this plugin.
+ */
+final class SRF {
 
 	/**
 	 * The unique identifier of this plugin.
@@ -63,9 +68,8 @@ class SRF {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'simple-rest-form';
-		
-		$this->load_dependencies();
 
+		$this->load_dependencies();
 	}
 
 	/**
@@ -91,22 +95,26 @@ class SRF {
 		 * core plugin.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-db.php';
-		new SimpleRestForm\DB();
+		new DB();
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-srf-admin.php';
-		new SimpleRestForm\SRF_Admin($this->plugin_name, $this->version);
+		new SRF_Admin( $this->plugin_name, $this->version );
+
+		/**
+		 * The class responsible for defining all actions for restapi.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-restapi.php';
+		new RestAPI( $this->plugin_name, $this->version );
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-srf-public.php';
-
-		// $this->loader = new Simple_Rest_Form_Loader();
-
+		new SRF_Public( $this->plugin_name, $this->version );
 	}
 
 	/**
@@ -129,5 +137,4 @@ class SRF {
 	public function get_version() {
 		return $this->version;
 	}
-	
 }
